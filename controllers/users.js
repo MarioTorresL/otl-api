@@ -57,6 +57,7 @@ const postUser = async (req, res) => {
 };
 
 const putUser = async (req, res) => {
+  //TODO: validate put user also if is admin role or same user
   try {
     const id = req.params;
 
