@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const UserSchema = Schema({
   first_name: String,
-  Last_Name: String,
+  last_name: String,
   email: {
     type: String,
     unique: true,
@@ -12,19 +12,17 @@ const UserSchema = Schema({
   role: {
     type: String,
     require: true,
-    default: 'User_Role'
+    default: "User_Role",
   },
-  balance: [
-    {
-      mount: Number,
-      date: {
-        type: Date,
-        default: Date.now(),
-      },
+  balance: {
+    mount: Number,
+    date: {
+      type: Date,
+      default: Date.now(),
     },
-  ],
+  },
 });
 
-const User = mongoose.model('User', UserSchema)
+const Users = mongoose.model("Users", UserSchema);
 
-module.exports = { User }
+module.exports = { Users };
