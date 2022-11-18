@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const connection = async ()=>{
 	try{
 		await mongoose.connect(process.env.DB_CNN)
-		console.log('Database ONline')
+		console.log('Database Online')
 	}catch(err){
 		console.log(err)
 		throw new Error('Database Connection Error')
