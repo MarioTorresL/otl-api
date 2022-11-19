@@ -15,7 +15,7 @@ app.use(express.json());
 connection();
 
 //routes
-
+app.use('/auth', require('./routes/auth'))
 app.use('/users', require('./routes/users'));
 
 app.get("/", (req, res) => res.status(200).json("Server works!!!"));

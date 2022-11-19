@@ -7,8 +7,6 @@ const getUsers = async (req, res) => {
   try {
     const users = await Users.find({}, "first_name last_name email ");
 
-    console.log("user", users);
-
     return res.status(200).json({
       message: "Get all users",
       users,
@@ -71,12 +69,15 @@ const putUser = async (req, res) => {
       });
     }
 
-    const userUpdate = await Users.findByIdAndUpdate(id, {first_name, last_name})
+    const userUpdate = await Users.findByIdAndUpdate(id, {
+      first_name,
+      last_name,
+    });
 
     return res.status(205).json({
-      message:'User Updated',
-      userUpdate
-    })
+      message: "User Updated",
+      userUpdate,
+    });
   } catch (err) {
     return res.status(500).json({
       message: "Bad Request",
