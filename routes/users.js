@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+const {verifyToken} = require('../middlewares/validateToken')
 const {
   getUsers,
   postUser,
@@ -7,14 +8,14 @@ const {
   putUser,
 } = require("../controllers/users");
 
-//route: api/users
+//route: /users
 
 router.get("/", getUsers);
 
 router.post("/", postUser);
 
-router.put("/:id", putUser);
+router.put("/:id", verifyToken, putUser);
 
-router.delete("/:id", deleteUser);
+router.delete("/:id", verifyToken, deleteUser);
 
 module.exports = router;

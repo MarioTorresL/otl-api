@@ -55,9 +55,15 @@ const postUser = async (req, res) => {
 };
 
 const putUser = async (req, res) => {
-  //TODO: validate put user also if is admin role or same user
   try {
-    const id = req.params;
+    const id = req.params.id;
+
+    //validate user_id and token_id
+    if(id != req.me){
+      return res.status(400).json({
+        message:'Cannot modify another user'
+      }) 
+    }
 
     const { first_name, last_name, password } = req.body;
 
@@ -72,12 +78,14 @@ const putUser = async (req, res) => {
     const userUpdate = await Users.findByIdAndUpdate(id, {
       first_name,
       last_name,
+      password
     });
 
-    return res.status(205).json({
+    return res.status(200).json({
       message: "User Updated",
       userUpdate,
     });
+
   } catch (err) {
     return res.status(500).json({
       message: "Bad Request",
@@ -89,6 +97,13 @@ const putUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const id = req.params.id;
+
+    //validate user_id and token_id
+    if(id != req.me){
+      return res.status(400).json({
+        message:'Cannot modify another user'
+      }) 
+    }
 
     const user = await Users.findById(id);
 
