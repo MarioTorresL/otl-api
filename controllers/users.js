@@ -31,11 +31,11 @@ const postUser = async (req, res) => {
     }
 
     const newUser = await Users.create({
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
+      first_name,
+      last_name,
+      email,
       password: bcrypt.hashSync(password, 7),
-      balance: balance,
+      balance,
     });
 
     const token = jwt.sign({ id: newUser.id }, process.env.SECRET_KEY, {

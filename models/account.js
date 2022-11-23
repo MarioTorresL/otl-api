@@ -13,7 +13,7 @@ const AccountSchema = Schema({
     {
       mount: Number,
       date: {
-        type: Data,
+        type: Date,
         default: Date.now(),
       },
     },

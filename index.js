@@ -17,6 +17,7 @@ connection();
 //routes
 app.use('/auth', require('./routes/auth'))
 app.use('/users', require('./routes/users'));
+app.use('/accounts', require('./routes/accounts'));
 
 app.get("/", (req, res) => res.status(200).json("Server works!!!"));
 
