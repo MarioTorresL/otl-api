@@ -1,7 +1,6 @@
 const { Accounts } = require("../models/account");
 
 const getAccounts = async (req, res) => {
-  console.log("heeeeey");
   try {
     const user = req.me;
 
@@ -21,10 +20,16 @@ const getAccounts = async (req, res) => {
 
 const getOneAccount = async (req, res) => {
   try {
-    const accountId = req.params;
+    const accountId = req.params.id;
     const uid = req.me;
 
     const account = await Accounts.findById(accountId);
+
+    if (!account) {
+      return res.status(404).json({
+        message: "Account not found",
+      });
+    }
 
     if (account.user !== uid) {
       return res.status(401).json({
@@ -47,15 +52,102 @@ const getOneAccount = async (req, res) => {
 
 const postAccount = async (req, res) => {
   try {
-  } catch (err) {}
-};
-const putAccount = async (req, res) => {
-  try {
-  } catch (err) {}
-};
-const deleteAccount = async (req, res) => {
-  try {
-  } catch (err) {}
+    const { name, user, description, total_balance, active = true } = req.body;
+
+    const newAccount = await Accounts.create({
+      name,
+      user,
+      description,
+      total_balance,
+      active,
+    });
+
+    return res.status(200).json({
+      message: "Account create",
+      newAccount,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Bad Request",
+      error: err.message,
+    });
+  }
 };
 
-module.exports = { getAccounts, getOneAccount };
+const putAccount = async (req, res) => {
+  try {
+    const { name, description, total_balance, active } = req.body
+    const accountId = req.params.id
+    const uid = req.me;
+
+
+    const account = await Accounts.findById(accountId)
+
+    if(account.user !== uid){
+      return res.status(401).json({
+        message: 'Unauthorized'
+      })
+    }
+
+    const userUpdate = await Accounts.findByIdAndUpdate(accountId, {
+      name,
+      description,
+      total_balance,
+      active
+    })
+
+    return res.status(200).json({
+      message: 'Account Update',
+      userUpdate
+    })
+
+
+
+  } catch (err) {
+    return res.status(500).json({
+      message: "Bad Request",
+      error: err.message,
+    });
+  }
+};
+
+const deleteAccount = async (req, res) => {
+  try {
+    const accountId = req.params.id;
+    const uid = req.me;
+
+    const account = await Accounts.findById(accountId);
+
+    if (!account) {
+      return res.status(404).json({
+        message: "Account not found",
+      });
+    }
+
+    if (account.user !== uid) {
+      return res.status(401).json({
+        message: "This account belongs to another user",
+        error: "Unauthorized",
+      });
+    }
+
+    await Accounts.findByIdAndDelete(accountId);
+
+    return res.status(200).json({
+      message: "Account delete",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Bad Request",
+      error: err.message,
+    });
+  }
+};
+
+module.exports = {
+  getAccounts,
+  getOneAccount,
+  postAccount,
+  putAccount,
+  deleteAccount,
+};

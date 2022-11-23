@@ -1,17 +1,17 @@
 const router = require("express").Router();
 
 const { verifyToken } = require("../middlewares/validateToken")
-const { getAccounts, getOneAccount } = require("../controllers/accounts")
+const { getAccounts, getOneAccount, putAccount, deleteAccount, postAccount } = require("../controllers/accounts")
 //route : /accounts
 //
 router.get("/", verifyToken, getAccounts);
 
 router.get("/:id", verifyToken, getOneAccount);
 
-router.post("/", verifyToken);
+router.post("/", verifyToken, postAccount);
 
-router.put("/:id", verifyToken);
+router.put("/:id", verifyToken, putAccount);
 
-router.delete("/:id", verifyToken);
+router.delete("/:id", verifyToken, deleteAccount);
 
 module.exports = router;
