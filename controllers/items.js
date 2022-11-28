@@ -52,6 +52,19 @@ const getOneItem = async (req, res) => {
 
 const postItem = async (req, res) => {
   try {
+    const { name, value, date_expire, account } = req.body;
+
+    const newItem = await Items.create({
+      name,
+      value,
+      date_expire,
+      account,
+    });
+
+    return res.status(200).json({
+      message: "Item create",
+      newItem,
+    });
   } catch (err) {
     return res.status(500).json({
       message: "Bad Request",
@@ -61,6 +74,29 @@ const postItem = async (req, res) => {
 };
 const putItem = async (req, res) => {
   try {
+    const { name, value, date_expire, date_init } = req.body;
+    const itemId =  req.params.id
+
+    const item = await Items.findById(itemId)
+
+    if(!item){
+      return res.status(404).json({
+        message: 'Item not found'
+      })
+    }
+
+    const itemUpdate = await Items.findByIdAndDelete(itemId, {
+      name,
+      value,
+      date_expire,
+      date_init,
+      active
+    })
+
+    return res.stauts(200).json({
+      message : 'Item updated',
+      itemUpdate
+    })
   } catch (err) {
     return res.status(500).json({
       message: "Bad Request",
@@ -70,6 +106,14 @@ const putItem = async (req, res) => {
 };
 const deleteItem = async (req, res) => {
   try {
+    const itemId = req.params.id
+
+    const item = await Items.findByIdAndRemove(itemId)
+
+    return res.status(200).json({
+      message: 'Item deleted'
+    })
+
   } catch (err) {
     return res.status(500).json({
       message: "Bad Request",

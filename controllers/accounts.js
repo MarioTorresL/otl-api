@@ -83,6 +83,12 @@ const putAccount = async (req, res) => {
 
     const account = await Accounts.findById(accountId)
 
+    if(!account){
+      return res.status(404).json({
+        message: 'Account Not Found'
+      })
+    }
+
     if(account.user !== uid){
       return res.status(401).json({
         message: 'Unauthorized'
